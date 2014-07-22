@@ -174,19 +174,19 @@
 
   <div class="form-group">
     <label for="input">Name</label>
-    <input type="name" class="form-control" id="inputType" name="inputName" placeholder="Enter name">
+    <input type="text" class="form-control" id="inputType" name="inputName" placeholder="Enter name">
   </div>
   
    
    <div class="form-group">
     <label for="input">Email Address</label>
-    <input type="name" class="form-control" id="inputType" name="inputEmail" placeholder="Enter email">
+    <input type="text" class="form-control" id="inputType" name="inputEmail" placeholder="Enter email">
   </div>
   
   
   <div class="form-group">
     <label for="input">Phone</label>
-    <input type="phone" class="form-control" id="inputType" name="inputPhone" placeholder="Enter phone number">
+    <input type="text" class="form-control" id="inputType" name="inputPhone" placeholder="Enter phone number">
   </div>
   
   
@@ -211,7 +211,7 @@
   
   <div class="form-group">
     <label for="input">Location on Box</label>
-    <input type="boxLocation" class="form-control" id="inputTypelocation" name="inputBox" placeholder="Location on box">
+    <input type="text" class="form-control" id="inputTypelocation" name="inputBox" placeholder="Location on box">
   </div>
   
 
@@ -228,14 +228,14 @@
 
 
 <div class="form-group hidden" id="customSize">
-    <label for="input">Enter Custom Size</label>
-    <input type="custom" class="form-control" name="inputCustomSize" placeholder="Custom size" id="customSizeInput">
+    <label for="inputCustomSize">Enter Custom Size</label>
+    <input type="text" class="form-control" name="inputCustomSize" placeholder="Custom size" id="customSizeInput">
 </div>
 
   
 <div class="form-group">
     <label for="input">Copies</label>
-    <input type="copies" class="form-control" id="inputType" name="inputCopies" placeholder="Copies">
+    <input type="text" class="form-control" id="inputType" name="inputCopies" placeholder="Copies">
 </div>
   
 
@@ -253,7 +253,7 @@
 
 <div class="form-group hidden" id="customFormat">
     <label for="input">Enter Format</label>
-    <input type="custom" class="form-control" name="inputCustomFormat" placeholder="Other format" id="customSizeFormat">
+    <input type="text" class="form-control" name="inputCustomFormat" placeholder="Other format" id="customSizeFormat">
 </div>
 
 
@@ -298,13 +298,13 @@
   
 <div class="form-group" id="shippingInfo">
     <label for="input">Enter Shipping Address</label>
-    <input type="shipping" class="form-control" name="inputShippingInfo" placeholder="Shipping address" id="customShippingInfo">
+    <input type="text" class="form-control" name="inputShippingInfo" placeholder="Shipping address" id="customShippingInfo">
 </div>
   
   
 <div class="form-group hidden" id="pickupInfo">
     <label for="input">Enter Location</label>
-    <input type="pickup" class="form-control" name="inputPickupInfo" placeholder="Where will you be located?" id="printPickupInfo">
+    <input type="text" class="form-control" name="inputPickupInfo" placeholder="Where will you be located?" id="printPickupInfo">
 </div>
   
   
@@ -316,7 +316,7 @@
 <div class="form-group" id="dropDown-Group">
 <div class="datepicker dropdown" id="myDatepicker">
 	<label for="input">Date Needed By</label>
-    	<div class="input-append">
+    <div class="input-append">
         <div class="dropdown-menu"></div>
         <input type="text" class="span2" value="" data-toggle="dropdown" name="inputDate" id="inputType">
         <button type="button" class="btn" data-toggle="dropdown"><i class="icon-calendar"></i></button>
@@ -586,7 +586,29 @@ var validateFields=function(){
 
 
 
+var testFormData = function(){
+
+
+	var fields = ["inputName", "inputEmail", "inputPhone", "inputBox", "inputSize","inputCopies", "inputFormat"];
+	// 
+	//"inputProof", "inputSpecialInstructions", "inputDelivery"
+	//"inputDate", "inputTime"
+
+	for (var fieldNameNumber in fields)
+	{
+		var name =fields[fieldNameNumber];
+		var field = document.forms["myForm"][name];
+
+		if (typeof field === undefined)
+		{
+			console.log ("missing " + name);
+		}
 		
+		$(field).val("Test "+ name);
+	}
+
+	//document.forms["myForm"]["inputName"].value("Test");
+}		
 
 var sendForm = function(){
 
@@ -606,15 +628,34 @@ var sendForm = function(){
 
 
 	//var jaz = $.get ( "http://magainteractive.com/scripts/mailneha.php", function() { 
-var onDataReceived = function() { 
-		alert("Thanks for submitting your form!");
+var onDataReceived = function(formData) { //storing form data in parameter
+		console.log(formData);
+		alert("Form sent!");
 }
-	$.get ("http://magainteractive.com/scripts/mailneha.php", {pname: name, pemail: "email", pphone: "phone", plocation: "location", psize: "size", pcopies: "copies", pformat: "format", pproof: "proof", pinstructions: "instructions", pdelivery: "delivery", pdate: "date", ptime: "time"}, onDataReceived)
-	.fail(function(e) {
-		console.log ("error");
-		console.log (e);
-   		$("#alertMessage").removeClass("hidden");
+
+var setting = {
+	type: 'POST',
+	dataType: 'json',
+	data:{pname: name, pemail: email, pphone: phone, plocation: location, psize: size, pcopies: copies, pformat: format, pproof: proof, pinstructions: instructions, pdelivery: delivery, pdate: date, ptime: time},
+	crossDomain: true
+}
+
+var request = $.ajax("http://magainteractive.com/scripts/mailneha.php", setting)
+	
+	.done(onDataReceived) //success
+
+	.fail(function(error){ //fail
+		$("#alertMessage").removeClass("hidden");
+		console.log("form not sent");
 	});
+
+
+	//$.ajax ("http://magainteractive.com/scripts/mailneha.php?callback=?", {pname: name, pemail: "email", pphone: "phone", plocation: "location", psize: "size", pcopies: "copies", pformat: "format", pproof: "proof", pinstructions: "instructions", pdelivery: "delivery", pdate: "date", ptime: "time"}, onDataReceived);
+	// .fail(function(e) {
+	// 	console.log ("error");
+	// 	console.log (e);
+ //   		$("#alertMessage").removeClass("hidden");
+	// });
 	
 }
 	
@@ -633,9 +674,9 @@ console.log ("ok");
 $("#inputTypeSubmit").click (function(e){
 	
 	//alert ("submitting");
-	//if(validateFields() === true){
+	if(validateFields() === true){
 		sendForm();
-	//} 
+	} 
 	e.preventDefault();
 	return true;
 });
