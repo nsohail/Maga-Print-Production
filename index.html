@@ -383,31 +383,30 @@
 <script>	
 
 $( document ).ready(function() {
-   	 	console.log( "ready!" );
+   	console.log( "ready!" );
 		
 		
 
-$('#contactTab').click(function(e){
-    $('#slideDownContact').slideToggle(600);
-	$('#slideDownVendors').hide();
-	$('#slideDownGuides').hide();
-	
-});
+	$('#contactTab').click(function(e){
+	    $('#slideDownContact').slideToggle(600);
+		$('#slideDownVendors').hide();
+		$('#slideDownGuides').hide();
+	});
 
-$('#vendorsTab').click(function(e){
-    $('#slideDownVendors').slideToggle(600);
-	$('#slideDownContact').hide();
-	$('#slideDownGuides').hide();
-});
+	$('#vendorsTab').click(function(e){
+	    $('#slideDownVendors').slideToggle(600);
+		$('#slideDownContact').hide();
+		$('#slideDownGuides').hide();
+	});
 
-$('#guidesTab').click(function(e){
-    $('#slideDownGuides').slideToggle(600);
-	$('#slideDownContact').hide();
-	$('#slideDownVendors').hide();
-});
+	$('#guidesTab').click(function(e){
+	    $('#slideDownGuides').slideToggle(600);
+		$('#slideDownContact').hide();
+		$('#slideDownVendors').hide();
+	});
 		
 		
-		$('#myDatepicker').datepicker();
+	$('#myDatepicker').datepicker();
 		
 		
 	
@@ -532,8 +531,8 @@ var validateForm= function(fieldName, errorLine){
 
 
 
-var validateEmail= function (inputEmail)
-{
+var validateEmail = function (inputEmail){
+
 var x= document.forms["myForm"][inputEmail].value;
 var atpos=x.indexOf("@");
 var dotpos=x.lastIndexOf(".");
@@ -573,14 +572,18 @@ var validateFields=function(){
 	var isValidPhone = validateForm("inputPhone", "*Phone number must be filled out");
 	var isValidBox = validateForm("inputBox", "*Box location must be filled out");
 	var isValidCopies = validateForm("inputCopies", "*Number of copies must be filled out");
-	
+
+
+	if(!$('#shippingInfo').hasClass("hidden")){
+		var isValidShipping = validateForm("inputShippingInfo", "*Enter your shipping address")
+	}
+
+	if(!$('#pickupInfo').hasClass("hidden")){
+		var isValidShipping = validateForm("inputPickupInfo", "*Enter your pickup location")
+	}
+
 	/*if these variable are true, return true*/
-	return (isValidName && isValidEmail && isValidPhone && isValidBox && isValidCopies)
-	/*{
-		return true;
-	} else {
-		return false;
-	}*/
+	return (isValidName && isValidEmail && isValidPhone && isValidBox && isValidCopies && isValidShipping)
 };
 
 
